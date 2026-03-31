@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-labelledby="title">
+  <title>Spring Open</title>
+  <rect width="240" height="240" rx="40" fill="#183153"/>
+  <path d="M75 180h90l-10-18H85l-10 18Zm26-34h38l-8-19 13-20-15-11 9-28-26 11-26-11 9 28-15 11 13 20-8 19Z" fill="#f4efe6"/>
+  <circle cx="120" cy="57" r="18" fill="#d97706"/>
+</svg>

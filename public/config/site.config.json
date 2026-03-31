@@ -1,0 +1,24 @@
+{
+  "branding": {
+    "siteTitle": "Spring Open 2026",
+    "primaryColor": "#183153",
+    "accentColor": "#d97706",
+    "logoPath": "./assets/logo.svg"
+  },
+  "dataSource": {
+    "pgnBasePath": "./data",
+    "roundFilePattern": "round{n}.pgn",
+    "maxRounds": 5
+  },
+  "scoring": {
+    "win": 1,
+    "draw": 0.5,
+    "loss": 0,
+    "bye": 0,
+    "forfeitWin": 1,
+    "forfeitLoss": 0
+  },
+  "display": {
+    "showRatings": true
+  }
+}
