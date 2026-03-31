@@ -33,7 +33,6 @@ Organizers should customize the website by editing `public/config/site.config.js
 - `branding.siteTitle`: page title and hero title fallback
 - `branding.primaryColor` / `branding.accentColor`: theme colors
 - `branding.logoPath`: main logo path
-- `branding.sponsorLogoPaths`: sponsor logo asset paths
 - `dataSource.pgnBasePath`: hosted PGN directory
 - `dataSource.roundFilePattern`: round filename pattern such as `round{n}.pgn`
 - `dataSource.maxRounds`: discovery limit before the app stops checking

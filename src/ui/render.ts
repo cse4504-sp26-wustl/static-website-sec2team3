@@ -21,22 +21,6 @@ const applyTheme = (config: SiteConfig): void => {
   document.documentElement.style.setProperty("--color-accent", config.branding.accentColor);
 };
 
-const renderSponsors = (paths: string[]): string => {
-  if (paths.length === 0) {
-    return "";
-  }
-
-  return `
-    <div class="sponsor-strip">
-      ${paths
-        .map(
-          (path) => `<img class="sponsor-logo" src="${escapeHtml(path)}" alt="Sponsor logo" loading="lazy" />`
-        )
-        .join("")}
-    </div>
-  `;
-};
-
 const renderHeader = (
   config: SiteConfig,
   metadata: { name: string; site?: string; date?: string }
@@ -59,7 +43,6 @@ const renderHeader = (
         : ""
     }
   </header>
-  ${renderSponsors(config.branding.sponsorLogoPaths)}
 `;
 
 const renderStandingRow = (standing: Standing, showRatings: boolean): string => `

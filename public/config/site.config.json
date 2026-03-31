@@ -3,8 +3,7 @@
     "siteTitle": "Spring Open 2026",
     "primaryColor": "#183153",
     "accentColor": "#d97706",
-    "logoPath": "/assets/logo.svg",
-    "sponsorLogoPaths": ["/assets/sponsors/west-hall.svg", "/assets/sponsors/knight-fund.svg"]
+    "logoPath": "/assets/logo.svg"
   },
   "dataSource": {
     "pgnBasePath": "/data",
