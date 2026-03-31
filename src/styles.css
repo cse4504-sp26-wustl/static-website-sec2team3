@@ -1,0 +1,256 @@
+:root {
+  --color-primary: #183153;
+  --color-accent: #d97706;
+  --color-surface: #f4efe6;
+  --color-paper: #fffdf8;
+  --color-ink: #1b1a18;
+  --color-muted: #70685d;
+  --shadow-soft: 0 18px 50px rgba(24, 49, 83, 0.14);
+  font-family: Georgia, "Times New Roman", serif;
+  color: var(--color-ink);
+  background:
+    radial-gradient(circle at top left, rgba(217, 119, 6, 0.12), transparent 28%),
+    linear-gradient(180deg, #f7f2e9 0%, #efe4d1 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+mark {
+  background: rgba(217, 119, 6, 0.2);
+  color: inherit;
+  padding: 0 0.15rem;
+}
+
+.page-shell {
+  width: min(1180px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 2rem 0 3rem;
+}
+
+.hero,
+.panel,
+.sponsor-strip {
+  background: rgba(255, 253, 248, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(24, 49, 83, 0.08);
+  box-shadow: var(--shadow-soft);
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1.4fr minmax(160px, 220px);
+  gap: 1.5rem;
+  align-items: center;
+  border-radius: 28px;
+  padding: 2rem;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.78rem;
+  color: var(--color-accent);
+  margin: 0 0 0.75rem;
+}
+
+.hero h1,
+.panel h2,
+.panel h3 {
+  margin: 0;
+  line-height: 1.05;
+}
+
+.hero h1 {
+  font-size: clamp(2.2rem, 5vw, 4.4rem);
+}
+
+.hero-meta,
+.panel-copy,
+.panel-header p,
+.search-field span,
+.result-raw {
+  color: var(--color-muted);
+}
+
+.hero-meta {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin: 1rem 0 0;
+}
+
+.hero-logo {
+  justify-self: end;
+  width: min(220px, 100%);
+}
+
+.sponsor-strip {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 22px;
+  margin-top: 1.25rem;
+  overflow-x: auto;
+}
+
+.sponsor-logo {
+  min-width: 180px;
+  max-height: 64px;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.panel {
+  border-radius: 24px;
+  padding: 1.25rem;
+}
+
+.rounds-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.search-field {
+  display: grid;
+  gap: 0.4rem;
+  min-width: min(100%, 240px);
+}
+
+.search-field input {
+  border: 1px solid rgba(24, 49, 83, 0.16);
+  border-radius: 999px;
+  padding: 0.8rem 1rem;
+  font: inherit;
+  background: #fff;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.standings-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.standings-table th,
+.standings-table td {
+  text-align: left;
+  padding: 0.85rem 0.6rem;
+  border-bottom: 1px solid rgba(24, 49, 83, 0.08);
+}
+
+.standings-table th {
+  color: var(--color-primary);
+}
+
+.round-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.game-card {
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(24, 49, 83, 0.04), rgba(24, 49, 83, 0.01));
+  border: 1px solid rgba(24, 49, 83, 0.08);
+  padding: 0.9rem 1rem;
+}
+
+.game-card.is-highlighted {
+  border-color: rgba(217, 119, 6, 0.55);
+  box-shadow: inset 0 0 0 1px rgba(217, 119, 6, 0.15);
+}
+
+.player-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: baseline;
+}
+
+.player-row + .player-row {
+  margin-top: 0.45rem;
+}
+
+.player {
+  font-weight: 700;
+}
+
+.player-black {
+  color: var(--color-primary);
+}
+
+.result-badge {
+  border-radius: 999px;
+  background: rgba(217, 119, 6, 0.12);
+  color: #9a4d00;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.88rem;
+}
+
+.center-state {
+  min-height: 100vh;
+  display: grid;
+  place-content: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .content-grid,
+  .hero {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-logo {
+    justify-self: start;
+    width: 160px;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-shell {
+    width: min(100% - 1rem, 1180px);
+    padding-top: 1rem;
+  }
+
+  .hero,
+  .panel {
+    border-radius: 20px;
+    padding: 1rem;
+  }
+
+  .panel-header {
+    flex-direction: column;
+  }
+
+  .player-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
