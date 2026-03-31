@@ -38,7 +38,6 @@ Organizers should customize the website by editing `public/config/site.config.js
 - `dataSource.maxRounds`: discovery limit before the app stops checking
 - `scoring`: scoring rules used by client-side standings
 - `display.showRatings`: toggles rating column
-- `display.highlightMatchingGames`: toggles round-card search highlighting
 
 ## PGN contract
 
@@ -49,6 +48,12 @@ Organizers should customize the website by editing `public/config/site.config.js
   - `Black "BYE"` or a termination containing `bye` counts as a bye.
   - a `Termination` containing `forfeit` maps `1-0` or `0-1` to forfeit results.
   - `Result "*"` is treated as incomplete and is rendered without affecting standings.
+
+## Architecture notes
+
+- The parser adapter is responsible for turning raw PGN headers into typed game data.
+- The application layer orchestrates loading and standings, but does not inspect raw PGN headers directly.
+- The domain layer remains pure and contains scoring and standings rules only.
 
 ## GitHub Pages deployment
 

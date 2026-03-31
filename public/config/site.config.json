@@ -19,7 +19,6 @@
     "forfeitLoss": 0
   },
   "display": {
-    "showRatings": true,
-    "highlightMatchingGames": true
+    "showRatings": true
   }
 }

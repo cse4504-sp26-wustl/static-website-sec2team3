@@ -1,11 +1,10 @@
-import type { ScoringRules, TournamentMetadata } from "@domain/models";
+import type { PlayerIdentity, ResultType, ScoringRules, TournamentMetadata } from "@domain/models";
 
 export interface SiteBrandingConfig {
   siteTitle: string;
   primaryColor: string;
   accentColor: string;
   logoPath?: string;
-  sponsorLogoPaths: string[];
 }
 
 export interface SiteDataSourceConfig {
@@ -16,7 +15,6 @@ export interface SiteDataSourceConfig {
 
 export interface SiteDisplayConfig {
   showRatings: boolean;
-  highlightMatchingGames: boolean;
 }
 
 export interface SiteConfig {
@@ -27,7 +25,12 @@ export interface SiteConfig {
 }
 
 export interface ParsedPgnGame {
-  headers: Record<string, string>;
+  roundNumber: number;
+  white: PlayerIdentity;
+  black: PlayerIdentity;
+  resultType: ResultType;
+  rawResult: string;
+  statusLabel: string;
 }
 
 export interface ParsedRound {

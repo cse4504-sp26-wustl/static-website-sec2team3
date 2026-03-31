@@ -7,8 +7,7 @@ const configRepository: SiteConfigRepository = {
     branding: {
       siteTitle: "Test Event",
       primaryColor: "#111111",
-      accentColor: "#222222",
-      sponsorLogoPaths: []
+      accentColor: "#222222"
     },
     dataSource: {
       pgnBasePath: "/data",
@@ -24,8 +23,7 @@ const configRepository: SiteConfigRepository = {
       forfeitLoss: 0
     },
     display: {
-      showRatings: true,
-      highlightMatchingGames: true
+      showRatings: true
     }
   })
 };
@@ -46,15 +44,12 @@ describe("loadTournamentWebsite", () => {
         },
         games: [
           {
-            headers: {
-              Event: "Test Event",
-              Site: "St. Louis",
-              Date: "2026.03.30",
-              Round: "1",
-              White: "Alice",
-              Black: "Ben",
-              Result: "1-0"
-            }
+            roundNumber: 1,
+            white: { name: "Alice" },
+            black: { name: "Ben" },
+            resultType: "white-win",
+            rawResult: "1-0",
+            statusLabel: "1-0"
           }
         ]
       })

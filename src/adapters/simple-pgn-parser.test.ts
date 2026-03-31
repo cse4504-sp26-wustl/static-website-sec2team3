@@ -12,6 +12,8 @@ describe("SimplePgnParser", () => {
     expect(parsed.roundNumber).toBe(1);
     expect(parsed.games).toHaveLength(1);
     expect(parsed.metadata.name).toBe("Test");
+    expect(parsed.games[0].white.name).toBe("Alice");
+    expect(parsed.games[0].resultType).toBe("white-win");
   });
 
   it("throws when required headers are missing", () => {

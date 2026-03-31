@@ -17,13 +17,6 @@ const asNumber = (value: unknown, fieldName: string): number => {
   return value;
 };
 
-const asStringArray = (value: unknown, fieldName: string): string[] => {
-  if (!Array.isArray(value) || value.some((item) => typeof item !== "string")) {
-    throw new Error(`Invalid config: ${fieldName} must be an array of strings.`);
-  }
-  return value;
-};
-
 export class RuntimeConfigRepository implements SiteConfigRepository {
   constructor(private readonly configPath: string = "/config/site.config.json") {}
 
@@ -52,8 +45,7 @@ export class RuntimeConfigRepository implements SiteConfigRepository {
         siteTitle: asString(branding.siteTitle, "branding.siteTitle"),
         primaryColor: asString(branding.primaryColor, "branding.primaryColor"),
         accentColor: asString(branding.accentColor, "branding.accentColor"),
-        logoPath: typeof branding.logoPath === "string" ? branding.logoPath : undefined,
-        sponsorLogoPaths: asStringArray(branding.sponsorLogoPaths ?? [], "branding.sponsorLogoPaths")
+        logoPath: typeof branding.logoPath === "string" ? branding.logoPath : undefined
       },
       dataSource: {
         pgnBasePath: asString(dataSource.pgnBasePath, "dataSource.pgnBasePath"),
@@ -69,8 +61,7 @@ export class RuntimeConfigRepository implements SiteConfigRepository {
         forfeitLoss: asNumber(scoring.forfeitLoss, "scoring.forfeitLoss")
       },
       display: {
-        showRatings: Boolean(display.showRatings),
-        highlightMatchingGames: display.highlightMatchingGames !== false
+        showRatings: Boolean(display.showRatings)
       }
     };
   }
