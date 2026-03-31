@@ -8,7 +8,7 @@
   "dataSource": {
     "pgnBasePath": "/data",
     "roundFilePattern": "round{n}.pgn",
-    "maxRounds": 3
+    "maxRounds": 5
   },
   "scoring": {
     "win": 1,
