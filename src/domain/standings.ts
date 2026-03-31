@@ -157,8 +157,6 @@ export const computeStandings = (
           case "unknown":
             break;
         }
-      } else {
-        white.wins += 1;
       }
     }
   }

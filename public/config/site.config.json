@@ -14,7 +14,7 @@
     "win": 1,
     "draw": 0.5,
     "loss": 0,
-    "bye": 1,
+    "bye": 0,
     "forfeitWin": 1,
     "forfeitLoss": 0
   },
