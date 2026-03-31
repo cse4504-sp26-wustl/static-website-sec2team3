@@ -32,8 +32,8 @@ Organizers should customize the website by editing `public/config/site.config.js
 
 - `branding.siteTitle`: page title and hero title fallback
 - `branding.primaryColor` / `branding.accentColor`: theme colors
-- `branding.logoPath`: main logo path
-- `dataSource.pgnBasePath`: hosted PGN directory
+- `branding.logoPath`: main logo path, preferably a relative static path such as `./assets/logo.svg`
+- `dataSource.pgnBasePath`: hosted PGN directory, preferably a relative path such as `./data`
 - `dataSource.roundFilePattern`: round filename pattern such as `round{n}.pgn`
 - `dataSource.maxRounds`: discovery limit before the app stops checking
 - `scoring`: scoring rules used by client-side standings

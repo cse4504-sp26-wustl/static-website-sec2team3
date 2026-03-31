@@ -18,7 +18,7 @@ const asNumber = (value: unknown, fieldName: string): number => {
 };
 
 export class RuntimeConfigRepository implements SiteConfigRepository {
-  constructor(private readonly configPath: string = "/config/site.config.json") {}
+  constructor(private readonly configPath: string = "./config/site.config.json") {}
 
   async load(): Promise<SiteConfig> {
     const response = await fetch(this.configPath);
