@@ -86,6 +86,9 @@ export const computeStandings = (
       player: PlayerIdentity;
       points: number;
       gamesPlayed: number;
+      wins: number;
+      losses: number;
+      draws: number;
     }
   >();
 
@@ -101,7 +104,10 @@ export const computeStandings = (
     const created = {
       player,
       points: 0,
-      gamesPlayed: 0
+      gamesPlayed: 0,
+      wins: 0,
+      losses: 0,
+      draws: 0
     };
     records.set(key, created);
     return created;
@@ -131,6 +137,28 @@ export const computeStandings = (
         if (delta.countBlackGame) {
           black.gamesPlayed += 1;
         }
+
+        switch (game.resultType) {
+          case "white-win":
+          case "forfeit-white-win":
+            white.wins += 1;
+            black.losses += 1;
+            break;
+          case "black-win":
+          case "forfeit-black-win":
+            white.losses += 1;
+            black.wins += 1;
+            break;
+          case "draw":
+            white.draws += 1;
+            black.draws += 1;
+            break;
+          case "incomplete":
+          case "unknown":
+            break;
+        }
+      } else {
+        white.wins += 1;
       }
     }
   }
@@ -140,7 +168,10 @@ export const computeStandings = (
       rank: 0,
       player: record.player,
       points: record.points,
-      gamesPlayed: record.gamesPlayed
+      gamesPlayed: record.gamesPlayed,
+      wins: record.wins,
+      losses: record.losses,
+      draws: record.draws
     }))
     .sort(sortByStanding);
 

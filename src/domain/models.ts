@@ -53,6 +53,9 @@ export interface PlayerRecord {
   player: PlayerIdentity;
   points: number;
   gamesPlayed: number;
+  wins: number;
+  losses: number;
+  draws: number;
 }
 
 export interface Standing extends PlayerRecord {

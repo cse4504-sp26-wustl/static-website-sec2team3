@@ -79,8 +79,7 @@ mark {
 .hero-meta,
 .panel-copy,
 .panel-header p,
-.search-field span,
-.result-raw {
+.search-field span {
   color: var(--color-muted);
 }
 
@@ -181,11 +180,6 @@ mark {
   padding: 0.9rem 1rem;
 }
 
-.game-card.is-highlighted {
-  border-color: rgba(217, 119, 6, 0.55);
-  box-shadow: inset 0 0 0 1px rgba(217, 119, 6, 0.15);
-}
-
 .player-row {
   display: flex;
   justify-content: space-between;
@@ -211,6 +205,14 @@ mark {
   color: #9a4d00;
   padding: 0.3rem 0.7rem;
   font-size: 0.88rem;
+}
+
+.result-summary {
+  margin: 0.85rem 0 0;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(24, 49, 83, 0.08);
+  font-weight: 700;
+  color: var(--color-primary);
 }
 
 .center-state {

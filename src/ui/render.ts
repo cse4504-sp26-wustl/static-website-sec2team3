@@ -11,8 +11,6 @@ const escapeHtml = (value: string): string =>
     .replaceAll("\"", "&quot;")
     .replaceAll("'", "&#39;");
 
-const normalize = (value: string): string => value.trim().toLocaleLowerCase();
-
 const formatPoints = (points: number): string =>
   Number.isInteger(points) ? String(points) : points.toFixed(1);
 
@@ -69,59 +67,68 @@ const renderStandingRow = (standing: Standing, showRatings: boolean): string => 
     <td>${standing.rank}</td>
     <td>${escapeHtml(standing.player.name)}</td>
     ${showRatings ? `<td>${escapeHtml(formatRating(standing.player.rating))}</td>` : ""}
+    <td>${standing.wins}-${standing.losses}</td>
     <td>${formatPoints(standing.points)}</td>
     <td>${standing.gamesPlayed}</td>
   </tr>
 `;
 
-const highlightMatch = (playerName: string, query: string): string => {
-  if (!query) {
-    return escapeHtml(playerName);
+const renderStandingsBody = (
+  standings: Standing[],
+  showRatings: boolean
+): string => {
+  if (standings.length === 0) {
+    return `<tr><td colspan="${showRatings ? 6 : 5}">No matching players found.</td></tr>`;
   }
 
-  const normalizedName = normalize(playerName);
-  const normalizedQuery = normalize(query);
-  const index = normalizedName.indexOf(normalizedQuery);
-
-  if (index === -1) {
-    return escapeHtml(playerName);
-  }
-
-  const before = escapeHtml(playerName.slice(0, index));
-  const match = escapeHtml(playerName.slice(index, index + query.length));
-  const after = escapeHtml(playerName.slice(index + query.length));
-  return `${before}<mark>${match}</mark>${after}`;
+  return standings
+    .map((standing) => renderStandingRow(standing, showRatings))
+    .join("");
 };
 
-const renderGame = (game: Game, query: string, highlightMatchingGames: boolean): string => {
-  const whiteName = highlightMatchingGames ? highlightMatch(game.white.name, query) : escapeHtml(game.white.name);
-  const blackName = highlightMatchingGames ? highlightMatch(game.black.name, query) : escapeHtml(game.black.name);
-  const isMatch =
-    query &&
-    (normalize(game.white.name).includes(normalize(query)) || normalize(game.black.name).includes(normalize(query)));
+const renderGame = (game: Game): string => {
+  const resultSummary = (() => {
+    switch (game.resultType) {
+      case "white-win":
+        return `Winner: ${game.white.name}`;
+      case "black-win":
+        return `Winner: ${game.black.name}`;
+      case "draw":
+        return "Draw";
+      case "bye":
+        return `Bye: ${game.white.name}`;
+      case "forfeit-white-win":
+        return `Winner by forfeit: ${game.white.name}`;
+      case "forfeit-black-win":
+        return `Winner by forfeit: ${game.black.name}`;
+      case "incomplete":
+        return "In progress";
+      case "unknown":
+        return "Result unavailable";
+    }
+  })();
 
   return `
-    <article class="game-card ${isMatch ? "is-highlighted" : ""}">
+    <article class="game-card">
       <div class="player-row">
-        <span class="player player-white">${whiteName}</span>
-        <span class="result-badge">${escapeHtml(game.statusLabel)}</span>
+        <span class="player player-white">White: ${escapeHtml(game.white.name)}</span>
       </div>
       <div class="player-row">
-        <span class="player player-black">${blackName}</span>
-        <span class="result-raw">${escapeHtml(game.rawResult)}</span>
+        <span class="player player-black">Black: ${escapeHtml(game.black.name)}</span>
       </div>
+      <p class="result-summary">${escapeHtml(resultSummary)}</p>
     </article>
   `;
 };
 
-const renderRound = (round: Round, query: string, highlightMatchingGames: boolean): string => `
+const renderRound = (round: Round): string => `
   <section class="panel">
     <div class="panel-header">
       <h3>Round ${round.number}</h3>
       <p>${round.games.length} game${round.games.length === 1 ? "" : "s"}</p>
     </div>
     <div class="round-grid">
-      ${round.games.map((game) => renderGame(game, query, highlightMatchingGames)).join("")}
+      ${round.games.map((game) => renderGame(game)).join("")}
     </div>
   </section>
 `;
@@ -131,73 +138,64 @@ const renderReadyState = (
   config: SiteConfig,
   data: Extract<WebsiteState, { status: "ready" }>
 ): void => {
-  let query = "";
-
-  const rerender = (): void => {
-    const filteredStandings = searchPlayers(data.standings, query);
-    root.innerHTML = `
-      <div class="page-shell">
-        ${renderHeader(config, data.tournament.metadata)}
-        <main class="content-grid">
-          <section class="panel">
+  root.innerHTML = `
+    <div class="page-shell">
+      ${renderHeader(config, data.tournament.metadata)}
+      <main class="content-grid">
+        <section class="panel">
+          <div class="panel-header">
+            <h2>Standings</h2>
+            <label class="search-field">
+              <span>Search players</span>
+              <input id="player-search" type="search" placeholder="Find a player" />
+            </label>
+          </div>
+          <div class="table-wrap">
+            <table class="standings-table">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Player</th>
+                  ${config.display.showRatings ? "<th>Rating</th>" : ""}
+                  <th>W-L</th>
+                  <th>Points</th>
+                  <th>Games</th>
+                </tr>
+              </thead>
+              <tbody id="standings-body">
+                ${renderStandingsBody(data.standings, config.display.showRatings)}
+              </tbody>
+            </table>
+          </div>
+        </section>
+        <section class="rounds-stack">
+          <div class="panel">
             <div class="panel-header">
-              <h2>Standings</h2>
-              <label class="search-field">
-                <span>Search players</span>
-                <input id="player-search" type="search" placeholder="Find a player" value="${escapeHtml(query)}" />
-              </label>
+              <h2>Rounds</h2>
+              <p>${data.tournament.rounds.length} loaded</p>
             </div>
-            <div class="table-wrap">
-              <table class="standings-table">
-                <thead>
-                  <tr>
-                    <th>Rank</th>
-                    <th>Player</th>
-                    ${config.display.showRatings ? "<th>Rating</th>" : ""}
-                    <th>Points</th>
-                    <th>Games</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${
-                    filteredStandings.length > 0
-                      ? filteredStandings
-                          .map((standing) => renderStandingRow(standing, config.display.showRatings))
-                          .join("")
-                      : `<tr><td colspan="${config.display.showRatings ? 5 : 4}">No matching players found.</td></tr>`
-                  }
-                </tbody>
-              </table>
-            </div>
-          </section>
-          <section class="rounds-stack">
-            <div class="panel">
-              <div class="panel-header">
-                <h2>Rounds</h2>
-                <p>${data.tournament.rounds.length} loaded</p>
-              </div>
-              <p class="panel-copy">
-                Future rounds stay hidden until a hosted PGN file is available.
-              </p>
-            </div>
-            ${data.tournament.rounds
-              .map((round) => renderRound(round, query, config.display.highlightMatchingGames))
-              .join("")}
-          </section>
-        </main>
-      </div>
-    `;
+            <p class="panel-copy">
+              Future rounds stay hidden until a hosted PGN file is available.
+            </p>
+          </div>
+          ${data.tournament.rounds.map((round) => renderRound(round)).join("")}
+        </section>
+      </main>
+    </div>
+  `;
 
-    const searchInput = root.querySelector<HTMLInputElement>("#player-search");
-    if (searchInput) {
-      searchInput.addEventListener("input", (event) => {
-        query = (event.target as HTMLInputElement).value;
-        rerender();
-      });
-    }
-  };
+  const searchInput = root.querySelector<HTMLInputElement>("#player-search");
+  const standingsBody = root.querySelector<HTMLTableSectionElement>("#standings-body");
 
-  rerender();
+  if (!searchInput || !standingsBody) {
+    return;
+  }
+
+  searchInput.addEventListener("input", (event) => {
+    const query = (event.target as HTMLInputElement).value;
+    const filteredStandings = searchPlayers(data.standings, query);
+    standingsBody.innerHTML = renderStandingsBody(filteredStandings, config.display.showRatings);
+  });
 };
 
 export const renderWebsite = (root: HTMLElement, state: WebsiteState, config?: SiteConfig): void => {

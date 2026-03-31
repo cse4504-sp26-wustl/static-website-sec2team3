@@ -67,6 +67,15 @@ describe("computeStandings", () => {
       ["Ben", 0],
       ["Finn", 0]
     ]);
+    expect(standings.map((standing) => [standing.player.name, `${standing.wins}-${standing.losses}`])).toEqual([
+      ["Alice", "1-0"],
+      ["Eva", "1-0"],
+      ["Gray", "1-0"],
+      ["Carla", "0-0"],
+      ["Dan", "0-0"],
+      ["Ben", "0-1"],
+      ["Finn", "0-1"]
+    ]);
   });
 
   it("ignores incomplete games when calculating points", () => {
@@ -92,5 +101,6 @@ describe("computeStandings", () => {
 
     expect(standings.map((standing) => standing.points)).toEqual([0, 0]);
     expect(standings.map((standing) => standing.gamesPlayed)).toEqual([0, 0]);
+    expect(standings.map((standing) => `${standing.wins}-${standing.losses}`)).toEqual(["0-0", "0-0"]);
   });
 });
