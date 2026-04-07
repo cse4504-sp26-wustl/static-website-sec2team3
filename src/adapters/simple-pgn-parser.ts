@@ -30,6 +30,12 @@ const parseHeaders = (gameText: string): Record<string, string> => {
   return headers;
 };
 
+const hasBodyContent = (gameText: string): boolean =>
+  gameText.split("\n").some((line) => {
+    const trimmed = line.trim();
+    return trimmed.length > 0 && !trimmed.startsWith("[");
+  });
+
 const validateRequiredHeaders = (headers: Record<string, string>): void => {
   const required = ["Event", "Site", "Date", "Round", "White", "Black", "Result"];
   for (const key of required) {
@@ -134,8 +140,25 @@ const toParsedGame = (headers: Record<string, string>, fallbackRoundNumber: numb
 
 export class SimplePgnParser implements PgnParser {
   parseRound(pgnText: string, fallbackRoundNumber: number): ParsedRound {
-    const games = splitGames(pgnText).map((gameText): ParsedPgnGame => {
-      const headers = parseHeaders(gameText);
+    const sharedHeaders: Record<string, string> = {};
+    const gameHeaders = splitGames(pgnText)
+      .map((gameText) => ({
+        gameText,
+        headers: parseHeaders(gameText)
+      }))
+      .filter(({ gameText, headers }) => {
+        const hasGameIdentity = Boolean(headers.White || headers.Black || headers.Result);
+
+        if (!hasGameIdentity && !hasBodyContent(gameText)) {
+          Object.assign(sharedHeaders, headers);
+          return false;
+        }
+
+        return true;
+      })
+      .map(({ headers }) => ({ ...sharedHeaders, ...headers }));
+
+    const games = gameHeaders.map((headers): ParsedPgnGame => {
       validateRequiredHeaders(headers);
       return toParsedGame(headers, fallbackRoundNumber);
     });
@@ -144,7 +167,7 @@ export class SimplePgnParser implements PgnParser {
       throw new Error("PGN round file contained no games.");
     }
 
-    const firstHeaders = parseHeaders(splitGames(pgnText)[0]);
+    const firstHeaders = gameHeaders[0];
 
     return {
       roundNumber: games[0].roundNumber || fallbackRoundNumber,

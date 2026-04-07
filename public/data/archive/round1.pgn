@@ -1,0 +1,33 @@
+[Event "Spring Open 2026"]
+[Site "St. Louis, MO"]
+[Date "2026.03.30"]
+[Round "1"]
+[White "Alice Nguyen"]
+[Black "Ben Carter"]
+[WhiteElo "1875"]
+[BlackElo "1810"]
+[Result "1-0"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 1-0
+
+[Event "Spring Open 2026"]
+[Site "St. Louis, MO"]
+[Date "2026.03.30"]
+[Round "1"]
+[White "Carla Ruiz"]
+[Black "David Kim"]
+[WhiteElo "1770"]
+[BlackElo "1755"]
+[Result "1/2-1/2"]
+
+1. d4 d5 2. c4 e6 1/2-1/2
+
+[Event "Spring Open 2026"]
+[Site "St. Louis, MO"]
+[Date "2026.03.30"]
+[Round "1"]
+[White "Eva Brooks"]
+[Black "BYE"]
+[WhiteElo "1690"]
+[Result "1-0"]
+[Termination "bye"]
