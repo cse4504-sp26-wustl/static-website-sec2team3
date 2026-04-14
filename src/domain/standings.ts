@@ -62,6 +62,7 @@ const scoreGame = (game: Game, scoring: ScoringRules): ScoreDelta | null => {
         countBlackGame: true
       };
     case "incomplete":
+    case "double-forfeit":
     case "unknown":
       return null;
   }
@@ -153,6 +154,7 @@ export const computeStandings = (
             white.draws += 1;
             black.draws += 1;
             break;
+          case "double-forfeit":
           case "incomplete":
           case "unknown":
             break;

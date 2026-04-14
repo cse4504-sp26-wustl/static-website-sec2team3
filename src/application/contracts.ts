@@ -26,11 +26,14 @@ export interface SiteConfig {
 
 export interface ParsedPgnGame {
   roundNumber: number;
+  boardNumber?: number;
   white: PlayerIdentity;
   black: PlayerIdentity;
   resultType: ResultType;
   rawResult: string;
   statusLabel: string;
+  termination?: string;
+  leadingComment?: string;
 }
 
 export interface ParsedRound {

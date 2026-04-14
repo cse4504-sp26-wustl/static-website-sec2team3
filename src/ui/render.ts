@@ -18,6 +18,13 @@ const formatPoints = (points: number): string =>
 
 const formatRating = (rating?: number): string => (rating ? String(rating) : "NA");
 
+const formatPlayerMeta = (player: Game["white"]): string | null => {
+  const parts = [player.rating ? formatRating(player.rating) : null, player.externalId ? `ID ${player.externalId}` : null]
+    .filter((part): part is string => Boolean(part));
+
+  return parts.length > 0 ? parts.join(" · ") : null;
+};
+
 const applyTheme = (config: SiteConfig): void => {
   document.documentElement.style.setProperty("--color-primary", config.branding.primaryColor);
   document.documentElement.style.setProperty("--color-accent", config.branding.accentColor);
@@ -88,11 +95,13 @@ const summarizeGameResult = (game: Game): string => {
     case "draw":
       return "Draw";
     case "bye":
-      return `Bye: ${game.white.name}`;
+      return game.statusLabel;
     case "forfeit-white-win":
-      return `Winner by forfeit: ${game.white.name}`;
+      return game.statusLabel;
     case "forfeit-black-win":
-      return `Winner by forfeit: ${game.black.name}`;
+      return game.statusLabel;
+    case "double-forfeit":
+      return game.statusLabel;
     case "incomplete":
       return "In progress";
     case "unknown":
@@ -100,20 +109,29 @@ const summarizeGameResult = (game: Game): string => {
   }
 };
 
+const renderPlayerLine = (label: string, player: Game["white"], emphasisClass = ""): string => {
+  const meta = formatPlayerMeta(player);
+
+  return `
+    <div class="player-line">
+      <span class="player-label">${escapeHtml(label)}</span>
+      <div class="player-copy">
+        <span class="player-name ${emphasisClass}">${escapeHtml(player.name)}</span>
+        ${meta ? `<span class="player-detail">${escapeHtml(meta)}</span>` : ""}
+      </div>
+    </div>
+  `;
+};
+
 const renderGame = (game: Game): string => `
   <article class="game-card">
     <div class="game-card-head">
+      ${game.boardNumber !== undefined ? `<span class="game-tag">Board ${game.boardNumber}</span>` : ""}
       <span class="game-tag">Round ${game.roundNumber}</span>
     </div>
     <div class="player-stack">
-      <div class="player-line">
-        <span class="player-label">White</span>
-        <span class="player-name">${escapeHtml(game.white.name)}</span>
-      </div>
-      <div class="player-line">
-        <span class="player-label">Black</span>
-        <span class="player-name player-name-dark">${escapeHtml(game.black.name)}</span>
-      </div>
+      ${renderPlayerLine("White", game.white)}
+      ${renderPlayerLine("Black", game.black, "player-name-dark")}
     </div>
     <p class="result-summary">${escapeHtml(summarizeGameResult(game))}</p>
   </article>

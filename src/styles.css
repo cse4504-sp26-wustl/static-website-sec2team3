@@ -354,6 +354,8 @@ input {
 .game-card-head {
   display: flex;
   justify-content: flex-end;
+  gap: 0.45rem;
+  flex-wrap: wrap;
   margin-bottom: 0.85rem;
 }
 
@@ -381,6 +383,12 @@ input {
   align-items: baseline;
 }
 
+.player-copy {
+  display: grid;
+  justify-items: end;
+  gap: 0.2rem;
+}
+
 .player-label {
   color: var(--color-muted);
   font-size: 0.84rem;
@@ -395,6 +403,11 @@ input {
 
 .player-name-dark {
   color: var(--color-primary);
+}
+
+.player-detail {
+  color: var(--color-muted);
+  font-size: 0.84rem;
 }
 
 .result-summary {
@@ -464,6 +477,10 @@ input {
   .player-line {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .player-copy {
+    justify-items: start;
   }
 
   .site-brand {
