@@ -25,16 +25,35 @@ const toGame = (parsedGame: ParsedPgnGame, fallbackRoundNumber: number, index: n
   const roundNumber = parsedGame.roundNumber || fallbackRoundNumber;
 
   return {
-    id: `${roundNumber}-${index}-${parsedGame.white.name}-${parsedGame.black.name}`
+    id: `${roundNumber}-${parsedGame.boardNumber ?? index}-${parsedGame.white.name}-${parsedGame.black.name}`
       .toLocaleLowerCase()
       .replace(/\s+/g, "-"),
     roundNumber,
+    boardNumber: parsedGame.boardNumber,
     white: parsedGame.white,
     black: parsedGame.black,
     resultType: parsedGame.resultType,
     rawResult: parsedGame.rawResult,
-    statusLabel: parsedGame.statusLabel
+    statusLabel: parsedGame.statusLabel,
+    termination: parsedGame.termination,
+    leadingComment: parsedGame.leadingComment
   };
+};
+
+const sortGamesByBoard = (left: ParsedPgnGame, right: ParsedPgnGame): number => {
+  if (left.boardNumber !== undefined && right.boardNumber !== undefined) {
+    return left.boardNumber - right.boardNumber;
+  }
+
+  if (left.boardNumber !== undefined) {
+    return -1;
+  }
+
+  if (right.boardNumber !== undefined) {
+    return 1;
+  }
+
+  return 0;
 };
 
 const mergeMetadata = (
@@ -43,7 +62,8 @@ const mergeMetadata = (
 ): TournamentMetadata => ({
   name: current?.name ?? next.name,
   site: current?.site ?? next.site,
-  date: current?.date ?? next.date
+  date: current?.date ?? next.date,
+  eventDate: current?.eventDate ?? next.eventDate
 });
 
 export const loadTournamentWebsite = async ({
@@ -64,9 +84,10 @@ export const loadTournamentWebsite = async ({
 
       const parsedRound = parser.parseRound(roundText, roundNumber);
       metadata = mergeMetadata(metadata, parsedRound.metadata);
+      const orderedGames = [...parsedRound.games].sort(sortGamesByBoard);
       rounds.push({
         number: parsedRound.roundNumber,
-        games: parsedRound.games.map((game, index) => toGame(game, parsedRound.roundNumber, index))
+        games: orderedGames.map((game, index) => toGame(game, parsedRound.roundNumber, index))
       });
     }
   } catch (error) {
