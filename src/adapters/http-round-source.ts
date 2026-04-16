@@ -10,6 +10,7 @@ const buildRoundUrl = (basePath: string, fileName: string): string => {
 
   // Bypass browser and intermediary caches so a refresh picks up newly uploaded PGNs quickly.
   url.searchParams.set("ts", String(Date.now()));
+  url.searchParams.set("time", String(new Date().getTime()));
 
   return url.toString();
 };
