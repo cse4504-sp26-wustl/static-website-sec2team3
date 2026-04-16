@@ -59,7 +59,8 @@ Organizer update flow:
 1. Switch to the `database` branch on GitHub.
 2. Open the `data/` folder.
 3. Upload a new round file such as `round4.pgn`, or replace an existing file such as `round2.pgn`.
-4. Refresh the GitHub Pages site to see the latest data.
+4. Commit and push file changes. 
+5. Refresh the GitHub Pages site to see the latest data. (delay of 15-20 seconds possible)
 
 If a newly uploaded PGN is malformed, the website will show a parsing error after refresh so the organizer can fix the file in the `database` branch.
 
