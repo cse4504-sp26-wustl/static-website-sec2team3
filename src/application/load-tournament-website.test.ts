@@ -77,4 +77,41 @@ describe("loadTournamentWebsite", () => {
     const state = await loadTournamentWebsite({ configRepository, roundSource, parser });
     expect(state.status).toBe("empty");
   });
+
+  it("includes the parse error message when an uploaded round is malformed", async () => {
+    const roundSource: RoundSource = {
+      loadRound: async (roundNumber) => (roundNumber === 2 ? "bad-round" : roundNumber === 1 ? "round-1" : null)
+    };
+
+    const parser: PgnParser = {
+      parseRound: (roundText, fallbackRoundNumber) => {
+        if (roundText === "bad-round") {
+          throw new Error(`Round ${fallbackRoundNumber} could not be parsed. Check the uploaded PGN file.`);
+        }
+
+        return {
+          roundNumber: fallbackRoundNumber,
+          metadata: {
+            name: "Test Event"
+          },
+          games: [
+            {
+              roundNumber: fallbackRoundNumber,
+              white: { name: "Alice" },
+              black: { name: "Ben" },
+              resultType: "white-win",
+              rawResult: "1-0",
+              statusLabel: "1-0"
+            }
+          ]
+        };
+      }
+    };
+
+    const state = await loadTournamentWebsite({ configRepository, roundSource, parser });
+    expect(state.status).toBe("malformed");
+    if (state.status === "malformed") {
+      expect(state.message).toContain("Round 2 could not be parsed");
+    }
+  });
 });
