@@ -3,6 +3,17 @@ import type { RoundSource, SiteDataSourceConfig } from "@application/contracts";
 const toRoundFileName = (pattern: string, roundNumber: number): string =>
   pattern.replace("{n}", String(roundNumber));
 
+const buildRoundUrl = (basePath: string, fileName: string): string => {
+  const normalizedBasePath = basePath.replace(/\/$/, "");
+  const origin = typeof window !== "undefined" ? window.location.href : "https://example.com";
+  const url = new URL(`${normalizedBasePath}/${fileName}`, origin);
+
+  // Bypass browser and intermediary caches so a refresh picks up newly uploaded PGNs quickly.
+  url.searchParams.set("ts", String(Date.now()));
+
+  return url.toString();
+};
+
 const looksLikeHtmlFallback = (body: string): boolean => {
   const trimmed = body.trim().toLocaleLowerCase();
   return trimmed.startsWith("<!doctype html") || trimmed.startsWith("<html");
@@ -13,8 +24,9 @@ export class HttpRoundSource implements RoundSource {
 
   async loadRound(roundNumber: number): Promise<string | null> {
     const fileName = toRoundFileName(this.config.roundFilePattern, roundNumber);
-    const basePath = this.config.pgnBasePath.replace(/\/$/, "");
-    const response = await fetch(`${basePath}/${fileName}`);
+    const response = await fetch(buildRoundUrl(this.config.pgnBasePath, fileName), {
+      cache: "no-store"
+    });
 
     if (response.status === 404) {
       return null;

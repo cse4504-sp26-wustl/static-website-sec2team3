@@ -13,15 +13,20 @@ describe("HttpRoundSource", () => {
   });
 
   it("returns null for a missing round with 404", async () => {
+    const fetchSpy = vi.fn().mockResolvedValue({
+      status: 404,
+      ok: false
+    });
+
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue({
-        status: 404,
-        ok: false
-      })
+      fetchSpy
     );
 
     await expect(source.loadRound(4)).resolves.toBeNull();
+    expect(fetchSpy).toHaveBeenCalledWith(expect.stringContaining("/data/round4.pgn?ts="), {
+      cache: "no-store"
+    });
   });
 
   it("returns null when a host sends HTML fallback for a missing round", async () => {

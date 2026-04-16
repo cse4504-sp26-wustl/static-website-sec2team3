@@ -82,7 +82,15 @@ export const loadTournamentWebsite = async ({
         break;
       }
 
-      const parsedRound = parser.parseRound(roundText, roundNumber);
+      let parsedRound;
+
+      try {
+        parsedRound = parser.parseRound(roundText, roundNumber);
+      } catch (error) {
+        const detail = error instanceof Error ? error.message : "Unknown parsing error.";
+        throw new Error(`Round ${roundNumber} could not be parsed. ${detail}`);
+      }
+
       metadata = mergeMetadata(metadata, parsedRound.metadata);
       const orderedGames = [...parsedRound.games].sort(sortGamesByBoard);
       rounds.push({
@@ -93,7 +101,10 @@ export const loadTournamentWebsite = async ({
   } catch (error) {
     return {
       status: "malformed",
-      message: error instanceof Error ? error.message : "The tournament data could not be parsed."
+      message:
+        error instanceof Error
+          ? error.message
+          : "The tournament data could not be parsed. Check the uploaded PGN in the database branch."
     };
   }
 

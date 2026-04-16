@@ -6,9 +6,9 @@
     "logoPath": "./assets/logo.svg"
   },
   "dataSource": {
-    "pgnBasePath": "./data",
+    "pgnBasePath": "https://raw.githubusercontent.com/cse4504-sp26-wustl/static-website-sec2team3/database/data",
     "roundFilePattern": "round{n}.pgn",
-    "maxRounds": 5
+    "maxRounds": 20
   },
   "scoring": {
     "win": 1,
